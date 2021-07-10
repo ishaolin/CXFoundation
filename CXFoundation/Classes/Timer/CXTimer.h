@@ -6,9 +6,11 @@
 //
 //
 
-#import "CXInvocation.h"
+#import <Foundation/Foundation.h>
 
 @class CXTimerConfig;
+
+typedef void(^CXTimerConfigBlock)(CXTimerConfig *config);
 
 @interface CXTimer : NSObject
 
@@ -20,17 +22,26 @@
 @property (nonatomic, assign, readonly) BOOL isSuspended;
 @property (nonatomic, assign) NSTimeInterval tolerance;
 
-+ (instancetype)taskTimerWithInvocation:(CXInvocation *)invocation
-                                 config:(CXTimerConfig *)config;
+/**
+ * Creates and returns a new CXTimer object initialized with the specified block object and schedules it on the current run loop in the `NSRunLoopCommonModes` mode.
+ */
++ (instancetype)taskTimerWithConfig:(CXTimerConfigBlock)config;
 
-+ (instancetype)scheduledTimerWithInvocation:(CXInvocation *)invocation
-                                      config:(CXTimerConfig *)config;
+/**
+ * Creates and returns a new CXTimer object initialized with the specified block object. This timer needs to be scheduled on a run loop (via -[CXTimer addToRunLoop: forMode:]) before it will fire.
+ */
++ (instancetype)timerWithConfig:(CXTimerConfigBlock)config;
 
-+ (instancetype)timerWithInvocation:(CXInvocation *)invocation
-                             config:(CXTimerConfig *)config;
+/**
+ * Creates and returns a new CXTimer object initialized with the specified block object and schedules it on the current run loop in the default mode.
+ */
++ (instancetype)scheduledTimerWithConfig:(CXTimerConfigBlock)config;
 
-- (instancetype)initWithInvocation:(CXInvocation *)invocation
-                            config:(CXTimerConfig *)config;
+/**
+ * Initializes a new CXTimer object using the block as the main body of execution for the timer. This timer needs to be scheduled on a run loop (via -[CXTimer addToRunLoop: forMode:]) before it will fire.
+ * In this way, appropriate `fireDate` must be set in config block.
+ */
+- (instancetype)initWithConfig:(CXTimerConfigBlock)config;
 
 - (void)fire;
 - (void)invalidate;
@@ -43,14 +54,11 @@
 
 @interface CXTimerConfig : NSObject
 
-@property (nonatomic, assign, readonly) NSTimeInterval interval;
-@property (nonatomic, assign, readonly) BOOL repeats;
-
+@property (nonatomic, strong) id target;
+@property (nonatomic, assign) SEL action;
+@property (nonatomic, assign) NSTimeInterval interval;
+@property (nonatomic, assign) BOOL repeats;
 @property (nonatomic, strong) NSDate *fireDate;
 @property (nonatomic, strong) id userInfo;
-
-+ (instancetype)configWithInterval:(NSTimeInterval)interval repeats:(BOOL)repeats;
-
-- (instancetype)initWithInterval:(NSTimeInterval)interval repeats:(BOOL)repeats;
 
 @end

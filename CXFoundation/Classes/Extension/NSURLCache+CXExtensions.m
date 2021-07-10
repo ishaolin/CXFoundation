@@ -6,9 +6,9 @@
 //
 
 #import "NSURLCache+CXExtensions.h"
-#import "CXUtil.h"
+#import "CXUtils.h"
 #import "NSBundle+CXExtensions.h"
-#import "CXStringUtil.h"
+#import "CXStringUtils.h"
 #import <objc/runtime.h>
 
 @implementation NSURLCache (CXExtensions)

@@ -16,7 +16,7 @@
 @implementation CXIndexObject
 
 - (NSArray<id<CXIndexPinyinObject>> *)objects{
-    return _objects;
+    return [_objects copy];
 }
 
 - (instancetype)initWithIndexKey:(NSString *)indexKey object:(id<CXIndexPinyinObject>)object{

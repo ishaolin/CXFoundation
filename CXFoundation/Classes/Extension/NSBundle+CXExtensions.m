@@ -31,4 +31,8 @@
     return [self.infoDictionary cx_stringForKey:@"CFBundleExecutable"];
 }
 
+- (NSString *)cx_displayName{
+    return [self.infoDictionary cx_stringForKey:@"CFBundleDisplayName"];
+}
+
 @end

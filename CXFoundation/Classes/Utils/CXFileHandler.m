@@ -6,7 +6,7 @@
 //
 
 #import "CXFileHandler.h"
-#import "CXStringUtil.h"
+#import "CXStringUtils.h"
 
 @implementation CXFileHandler
 

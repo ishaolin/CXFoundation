@@ -7,12 +7,7 @@
 //
 
 #import "CXTimer.h"
-
-typedef NS_ENUM(NSInteger, CXTimerInstanceMethod) {
-    CXTimerInstanceMethodInitializer    = 0,
-    CXTimerInstanceMethodTimer          = 1,
-    CXTimerInstanceMethodScheduledTimer = 2
-};
+#import "CXInvocation.h"
 
 @interface CXTimer(){
     NSTimer *_timer;
@@ -22,80 +17,71 @@ typedef NS_ENUM(NSInteger, CXTimerInstanceMethod) {
 
 @implementation CXTimer
 
-+ (instancetype)taskTimerWithInvocation:(CXInvocation *)invocation
-                                 config:(CXTimerConfig *)config{
-    CXTimer *timer = [self timerWithInvocation:invocation
-                                        config:config];
-    [timer addToRunLoop:[NSRunLoop currentRunLoop]
-                forMode:NSRunLoopCommonModes];
++ (instancetype)taskTimerWithConfig:(CXTimerConfigBlock)config{
+    CXTimer *timer = [[self alloc] init];
+    [timer createForTimerWithConfigBlock:config];
     return timer;
 }
 
-+ (instancetype)timerWithInvocation:(CXInvocation *)invocation
-                             config:(CXTimerConfig *)config{
-    return [[self alloc] initWithMethod:CXTimerInstanceMethodTimer
-                             invocation:invocation
-                                 config:config];
++ (instancetype)timerWithConfig:(CXTimerConfigBlock)config{
+    CXTimer *timer = [[self alloc] init];
+    [timer createForTimerWithConfigBlock:config];
+    return timer;
 }
 
-+ (instancetype)scheduledTimerWithInvocation:(CXInvocation *)invocation
-                                      config:(CXTimerConfig *)config{
-    return [[self alloc] initWithMethod:CXTimerInstanceMethodScheduledTimer
-                             invocation:invocation
-                                 config:config];
++ (instancetype)scheduledTimerWithConfig:(CXTimerConfigBlock)config{
+    CXTimer *timer = [[self alloc] init];
+    [timer createForScheduledTimerWithConfigBlock:config];
+    return timer;
 }
 
-- (instancetype)initWithInvocation:(CXInvocation *)invocation
-                            config:(CXTimerConfig *)config{
-    return [self initWithMethod:CXTimerInstanceMethodInitializer
-                     invocation:invocation config:config];
-}
-
-- (instancetype)initWithMethod:(CXTimerInstanceMethod)mothed
-                    invocation:(CXInvocation *)invocation
-                        config:(CXTimerConfig *)config{
-    NSParameterAssert(invocation);
-    NSParameterAssert(config);
-    if(mothed == CXTimerInstanceMethodInitializer){
-        NSParameterAssert(config.fireDate);
-    }
-    
+- (instancetype)initWithConfig:(CXTimerConfigBlock)config{
     if(self = [super init]){
-        _isSuspended = NO;
-        [invocation setExecutor:self];
-        
-        switch (mothed) {
-            case CXTimerInstanceMethodTimer:{
-                _timer = [NSTimer timerWithTimeInterval:config.interval
-                                                 target:invocation
-                                               selector:@selector(invoke)
-                                               userInfo:config.userInfo
-                                                repeats:config.repeats];
-            }
-                break;
-            case CXTimerInstanceMethodScheduledTimer:{
-                _timer = [NSTimer scheduledTimerWithTimeInterval:config.interval
-                                                          target:invocation
-                                                        selector:@selector(invoke)
-                                                        userInfo:config.userInfo
-                                                         repeats:config.repeats];
-            }
-                break;
-            case CXTimerInstanceMethodInitializer:{
-                _timer = [[NSTimer alloc] initWithFireDate:config.fireDate
-                                                  interval:config.interval
-                                                    target:invocation
-                                                  selector:@selector(invoke)
-                                                  userInfo:config.userInfo
-                                                   repeats:config.repeats];
-            }
-                break;
-            default:
-                break;
-        }
+        [self createForInitTimerWithConfigBlock:config];
     }
     
     return self;
+}
+
+- (void)createForTimerWithConfigBlock:(CXTimerConfigBlock)configBlock{
+    CXTimerConfig *config = [[CXTimerConfig alloc] init];
+    configBlock(config);
+    
+    CXInvocation *invocation = [CXInvocation invocationWithTarget:config.target action:config.action];
+    _timer = [NSTimer timerWithTimeInterval:config.interval
+                                     target:invocation
+                                   selector:@selector(invoke)
+                                   userInfo:config.userInfo
+                                    repeats:config.repeats];
+    
+    [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+}
+
+- (void)createForScheduledTimerWithConfigBlock:(CXTimerConfigBlock)configBlock{
+    CXTimerConfig *config = [[CXTimerConfig alloc] init];
+    configBlock(config);
+    
+    CXInvocation *invocation = [CXInvocation invocationWithTarget:config.target action:config.action];
+    _timer = [NSTimer scheduledTimerWithTimeInterval:config.interval
+                                              target:invocation
+                                            selector:@selector(invoke)
+                                            userInfo:config.userInfo
+                                             repeats:config.repeats];
+}
+
+- (void)createForInitTimerWithConfigBlock:(CXTimerConfigBlock)configBlock{
+    CXTimerConfig *config = [[CXTimerConfig alloc] init];
+    configBlock(config);
+    
+    NSParameterAssert(config.fireDate);
+    
+    CXInvocation *invocation = [CXInvocation invocationWithTarget:config.target action:config.action];
+    _timer = [[NSTimer alloc] initWithFireDate:config.fireDate
+                                      interval:config.interval
+                                        target:invocation
+                                      selector:@selector(invoke)
+                                      userInfo:config.userInfo
+                                       repeats:config.repeats];
 }
 
 - (NSDate *)fireDate{
@@ -128,15 +114,21 @@ typedef NS_ENUM(NSInteger, CXTimerInstanceMethod) {
 
 - (void)fire{
     [_timer fire];
+    
     _isSuspended = NO;
 }
 
 - (void)invalidate{
     [_timer invalidate];
+    
     _isSuspended = NO;
 }
 
 - (void)pause{
+    if(_isSuspended){
+        return;
+    }
+    
     if(_timer.isValid){
         _timer.fireDate = [NSDate distantFuture];
         _isSuspended = YES;
@@ -144,6 +136,10 @@ typedef NS_ENUM(NSInteger, CXTimerInstanceMethod) {
 }
 
 - (void)resume{
+    if(!_isSuspended){
+        return;
+    }
+    
     if(_timer.isValid){
         _timer.fireDate = [NSDate dateWithTimeIntervalSinceNow:_timer.timeInterval];
     }
@@ -155,10 +151,12 @@ typedef NS_ENUM(NSInteger, CXTimerInstanceMethod) {
     NSParameterAssert(runLoop);
     NSParameterAssert(mode);
     
-    if(_timer){
-        if([mode isEqualToString:NSDefaultRunLoopMode] || [mode isEqualToString:NSRunLoopCommonModes]){
-            [runLoop addTimer:_timer forMode:mode];
-        }
+    if(!_timer){
+        return;
+    }
+    
+    if([mode isEqualToString:NSDefaultRunLoopMode] || [mode isEqualToString:NSRunLoopCommonModes]){
+        [runLoop addTimer:_timer forMode:mode];
     }
 }
 
@@ -171,18 +169,5 @@ typedef NS_ENUM(NSInteger, CXTimerInstanceMethod) {
 @end
 
 @implementation CXTimerConfig
-
-+ (instancetype)configWithInterval:(NSTimeInterval)interval repeats:(BOOL)repeats{
-    return [[self alloc] initWithInterval:interval repeats:repeats];
-}
-
-- (instancetype)initWithInterval:(NSTimeInterval)interval repeats:(BOOL)repeats{
-    if(self = [super init]){
-        _interval = interval;
-        _repeats = repeats;
-    }
-    
-    return self;
-}
 
 @end

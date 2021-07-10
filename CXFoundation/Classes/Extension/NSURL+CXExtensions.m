@@ -7,7 +7,7 @@
 //
 
 #import "NSURL+CXExtensions.h"
-#import "CXStringUtil.h"
+#import "CXStringUtils.h"
 
 @implementation NSURL (CXExtensions)
 
@@ -49,7 +49,7 @@
         return (NSURL *)url;
     }
     
-    if([CXStringUtil isHTTPURL:url]){
+    if([CXStringUtils isHTTPURL:url]){
         return [NSURL URLWithString:(NSString *)url];
     }
     

@@ -96,9 +96,12 @@
         [_player play];
         
         if(self.progress && !_progresTimer){
-            CXTimerConfig *config = [[CXTimerConfig alloc] initWithInterval:1.0 repeats:YES];
-            CXInvocation *invocation = [[CXInvocation alloc] initWithTarget:self action:@selector(handlePlayProgres:)];
-            _progresTimer = [CXTimer taskTimerWithInvocation:invocation config:config];
+            _progresTimer = [CXTimer taskTimerWithConfig:^(CXTimerConfig *config) {
+                config.target = self;
+                config.action = @selector(handlePlayProgres:);
+                config.interval = 1.0;
+                config.repeats = YES;
+            }];
         }
     }else{
         if(completion){

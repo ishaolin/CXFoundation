@@ -1,16 +1,16 @@
 //
-//  CXDeviceUtil.m
+//  CXDeviceUtils.m
 //  Pods
 //
 //  Created by wshaolin on 2018/9/6.
 //
 
-#import "CXDeviceUtil.h"
+#import "CXDeviceUtils.h"
 #include <sys/param.h>
 #include <sys/mount.h>
 #import "NSDictionary+CXExtensions.h"
 
-@implementation CXDeviceUtil
+@implementation CXDeviceUtils
 
 + (uint64_t)freeDiskSpaceInBytes{
     NSDictionary<NSFileAttributeKey, id> *attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error:nil];

@@ -1,5 +1,5 @@
 //
-//  CXDeviceUtil.h
+//  CXDeviceUtils.h
 //  Pods
 //
 //  Created by wshaolin on 2018/9/6.
@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CXDeviceUtil : NSObject
+@interface CXDeviceUtils : NSObject
 
 + (uint64_t)freeDiskSpaceInBytes;
 + (uint64_t)totalDiskSpaceInBytes;

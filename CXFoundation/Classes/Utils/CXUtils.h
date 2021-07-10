@@ -1,5 +1,5 @@
 //
-//  CXUtil.h
+//  CXUtils.h
 //  Pods
 //
 //  Created by wshaolin on 2019/1/25.
@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "CXFoundationDefines.h"
 
-@interface CXUtil : NSObject
+@interface CXUtils : NSObject
 
 @end
 

@@ -1,14 +1,14 @@
 //
-//  CXUtil.m
+//  CXUtils.m
 //  Pods
 //
 //  Created by wshaolin on 2019/1/25.
 //
 
-#import "CXUtil.h"
+#import "CXUtils.h"
 #import <objc/message.h>
 
-@implementation CXUtil
+@implementation CXUtils
 
 @end
 

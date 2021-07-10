@@ -6,7 +6,7 @@
 //
 
 #import "CXLogger.h"
-#import "CXStringUtil.h"
+#import "CXStringUtils.h"
 
 static inline dispatch_queue_t CXLogWorkQueue(void){
     static dispatch_queue_t workQueue;
@@ -164,7 +164,7 @@ void CXAssertFunc(BOOL condition,
     
     @try{
         NSString *msg = @"nil";
-        if([CXStringUtil isValidString:format]){
+        if([CXStringUtils isValidString:format]){
             va_list args;
             va_start(args, format);
             msg = [[NSString alloc] initWithFormat:format arguments:args];

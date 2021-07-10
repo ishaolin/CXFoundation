@@ -1,13 +1,13 @@
 //
-//  CXStringUtil.m
+//  CXStringUtils.m
 //  Pods
 //
 //  Created by lcc on 2018/8/6.
 //
 
-#import "CXStringUtil.h"
+#import "CXStringUtils.h"
 
-@implementation CXStringUtil
+@implementation CXStringUtils
 
 + (BOOL)isValidString:(NSString *)string{
     if(!string){

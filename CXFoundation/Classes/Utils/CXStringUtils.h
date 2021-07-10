@@ -1,5 +1,5 @@
 //
-//  CXStringUtil.h
+//  CXStringUtils.h
 //  Pods
 //
 //  Created by lcc on 2018/8/6.
@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "CXFoundationDefines.h"
 
-@interface CXStringUtil : NSObject
+@interface CXStringUtils : NSObject
 
 + (BOOL)isValidString:(NSString *)string; // 字符串类型，长度大于0
 

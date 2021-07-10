@@ -6,7 +6,7 @@
 //
 
 #import "NSString+CXExtensions.h"
-#import "CXStringUtil.h"
+#import "CXStringUtils.h"
 
 @implementation NSString (CXExtensions)
 
@@ -70,7 +70,7 @@
 }
 
 - (NSString *)cx_URLStringByAppendingParams:(NSDictionary<NSString *, NSString *> *)params{
-    if(params.count > 0 && ([CXStringUtil isHTTPURL:self] || [CXStringUtil isFileURL:self])){
+    if(params.count > 0 && ([CXStringUtils isHTTPURL:self] || [CXStringUtils isFileURL:self])){
         NSURLComponents *components = [NSURLComponents componentsWithString:self];
         NSMutableArray<NSURLQueryItem *> *queryItems = [NSMutableArray array];
         if(components.queryItems){

@@ -66,10 +66,13 @@
 }
 
 - (void)setExecutor:(id)executor{
-    if(_executor != executor){
-        _executor = executor;
-        
-        [self setArg:&_executor atIndex:CXInvocationFirstArgumentIndex];
+    if(_executor == executor){
+        return;
+    }
+    
+    _executor = executor;
+    if(_invocation && _executor){
+        [_invocation setArgument:&_executor atIndex:CXInvocationFirstArgumentIndex];
     }
 }
 
@@ -86,21 +89,19 @@
 }
 
 - (BOOL)isValidArgIndex:(NSInteger)index{
-    if(_invocation){
-        return (index >= CXInvocationFirstArgumentIndex) &&
-        (index < _invocation.methodSignature.numberOfArguments);
+    if(!_invocation){
+        return NO;
     }
     
-    return NO;
+    return index >= CXInvocationFirstArgumentIndex &&
+    index < _invocation.methodSignature.numberOfArguments;
 }
 
 - (void)invoke{
     if(_invocation){
         [_invocation invoke];
     }else{
-        if(_actionBlock){
-            _actionBlock(_executor);
-        }
+        !_actionBlock ?: _actionBlock(_executor);
     }
 }
 

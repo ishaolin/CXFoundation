@@ -6,7 +6,7 @@
 //
 
 #import "CXBlockOperationQueue.h"
-#import "CXUtil.h"
+#import "CXUtils.h"
 
 static NSMutableArray<CXBlockOperationQueue *> *_operationQueues;
 

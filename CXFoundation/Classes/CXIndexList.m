@@ -7,7 +7,7 @@
 
 #import "CXIndexList.h"
 #import "NSString+CXExtensions.h"
-#import "CXUtil.h"
+#import "CXUtils.h"
 
 static inline CXIndexObject *_CXFetchIndexObjectByIndexKey(NSArray<CXIndexObject *> *indexObjects, NSString *indexKey){
     __block CXIndexObject *indexObject = nil;
@@ -31,11 +31,11 @@ static inline CXIndexObject *_CXFetchIndexObjectByIndexKey(NSArray<CXIndexObject
 @implementation CXIndexList
 
 - (NSArray<NSString *> *)indexKeys{
-    return _indexKeys;
+    return [_indexKeys copy];
 }
 
 - (NSArray<CXIndexObject *> *)indexObjects{
-    return _indexObjects;
+    return [_indexObjects copy];
 }
 
 - (instancetype)initWithIndexKeys:(NSArray<NSString *> *)indexKeys

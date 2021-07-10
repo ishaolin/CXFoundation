@@ -7,7 +7,7 @@
 //
 
 #import "CXStringSymbolRange.h"
-#import "CXStringUtil.h"
+#import "CXStringUtils.h"
 
 @interface CXStringSymbolRange(){
     NSString *_beginSymbol;

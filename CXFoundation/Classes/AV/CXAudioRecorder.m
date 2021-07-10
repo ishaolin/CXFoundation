@@ -141,10 +141,12 @@
     }
     
     _recordingProgress = 0;
-    CXInvocation *invocation = [[CXInvocation alloc] initWithTarget:self action:@selector(handleRecordingTimer:)];
-    CXTimerConfig *config = [[CXTimerConfig alloc] initWithInterval:1.0 repeats:YES];
-    _recordingTimer = [CXTimer timerWithInvocation:invocation config:config];
-    [_recordingTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    _recordingTimer = [CXTimer taskTimerWithConfig:^(CXTimerConfig *config) {
+        config.target = self;
+        config.action = @selector(handleRecordingTimer:);
+        config.interval = 1.0;
+        config.repeats = YES;
+    }];
     [_recordingTimer fire];
 }
 
@@ -173,10 +175,12 @@
         return;
     }
     
-    CXInvocation *invocation = [[CXInvocation alloc] initWithTarget:self action:@selector(handlePeakPowerTimer:)];
-    CXTimerConfig *config = [[CXTimerConfig alloc] initWithInterval:0.1 repeats:YES];
-    _peakPowerTimer = [CXTimer timerWithInvocation:invocation config:config];
-    [_peakPowerTimer addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
+    _peakPowerTimer = [CXTimer taskTimerWithConfig:^(CXTimerConfig *config) {
+        config.target = self;
+        config.action = @selector(handlePeakPowerTimer:);
+        config.interval = 1.0;
+        config.repeats = YES;
+    }];
     [_peakPowerTimer fire];
 }
 
