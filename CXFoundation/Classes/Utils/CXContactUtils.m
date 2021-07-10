@@ -19,35 +19,36 @@
     dispatch_once(&onceToken, ^{
         _contactStore = [[CNContactStore alloc] init];
     });
+    
     return _contactStore;
 }
 
 + (CXContactsAuthStatus)contactsAuthStatus{
-    if(@available(iOS 9.0, *)){
-        switch([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts]){
-            case CNAuthorizationStatusDenied:
-                return CXContactsAuthStatusDenied;
-            case CNAuthorizationStatusAuthorized:
-                return CXContactsAuthStatusAuthorized;
-            case CNAuthorizationStatusRestricted:
-                return CXContactsAuthStatusRestricted;
-            case CNAuthorizationStatusNotDetermined:
-            default:
-                return CXContactsAuthStatusNotDetermined;
-        }
-    }else{
-        switch(ABAddressBookGetAuthorizationStatus()){
-            case kABAuthorizationStatusRestricted:
-                return CXContactsAuthStatusRestricted;
-            case kABAuthorizationStatusDenied:
-                return CXContactsAuthStatusDenied;
-            case kABAuthorizationStatusAuthorized:
-                return CXContactsAuthStatusAuthorized;
-            case kABAuthorizationStatusNotDetermined:
-            default:
-                return CXContactsAuthStatusNotDetermined;
-        }
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
+    switch(ABAddressBookGetAuthorizationStatus()){
+        case kABAuthorizationStatusRestricted:
+            return CXContactsAuthStatusRestricted;
+        case kABAuthorizationStatusDenied:
+            return CXContactsAuthStatusDenied;
+        case kABAuthorizationStatusAuthorized:
+            return CXContactsAuthStatusAuthorized;
+        case kABAuthorizationStatusNotDetermined:
+        default:
+            return CXContactsAuthStatusNotDetermined;
     }
+#else
+    switch([CNContactStore authorizationStatusForEntityType:CNEntityTypeContacts]){
+        case CNAuthorizationStatusDenied:
+            return CXContactsAuthStatusDenied;
+        case CNAuthorizationStatusAuthorized:
+            return CXContactsAuthStatusAuthorized;
+        case CNAuthorizationStatusRestricted:
+            return CXContactsAuthStatusRestricted;
+        case CNAuthorizationStatusNotDetermined:
+        default:
+            return CXContactsAuthStatusNotDetermined;
+    }
+#endif
 }
 
 + (void)requestAuthorization:(CXContactsAuthCompletionBlock)completion{
@@ -56,23 +57,25 @@
         !completion ?: completion(status);
         return;
     }
-    if(@available (iOS 9.0, *)){
-        [[self sharedContactStore] requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
-            [CXDispatchHandler asyncOnMainQueue:^{
-                !completion ?: completion(granted ? CXContactsAuthStatusAuthorized : CXContactsAuthStatusDenied);
-            }];
+    
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
+    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
+    ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
+        [CXDispatchHandler asyncOnMainQueue:^{
+            !completion ?: completion(granted ? CXContactsAuthStatusAuthorized : CXContactsAuthStatusDenied);
         }];
-    }else{
-        ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
-        ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
-            [CXDispatchHandler asyncOnMainQueue:^{
-                !completion ?: completion(granted ? CXContactsAuthStatusAuthorized : CXContactsAuthStatusDenied);
-            }];
-        });
-        if(addressBookRef != NULL){
-            CFRelease(addressBookRef);
-        }
+    });
+    
+    if(addressBookRef != NULL){
+        CFRelease(addressBookRef);
     }
+#else
+    [[self sharedContactStore] requestAccessForEntityType:CNEntityTypeContacts completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        [CXDispatchHandler asyncOnMainQueue:^{
+            !completion ?: completion(granted ? CXContactsAuthStatusAuthorized : CXContactsAuthStatusDenied);
+        }];
+    }];
+#endif
 }
 
 + (void)fetchContacts:(CXContactsFetchCompletionBlock)completion{
@@ -80,6 +83,7 @@
         completion(nil);
         return;
     }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray<CXContact *> *contacts = [NSMutableArray array];
         [self enumerateContactsUsingBlock:^(CXContact *contact) {
@@ -94,6 +98,7 @@
         completion(nil);
         return;
     }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray<CXContact *> *contacts = [NSMutableArray array];
         [self enumerateContactsUsingBlock:^(CXContact *contact) {
@@ -108,28 +113,28 @@
 }
 
 + (void)enumerateContactsUsingBlock:(CXContactsEnumerateBlock)block{
-    if(@available(iOS 9.0, *)){
-        NSArray<id<CNKeyDescriptor>> *fetchKeys = @[[CNContactFormatter descriptorForRequiredKeysForStyle:CNContactFormatterStyleFullName],
-                                                    CNContactPhoneNumbersKey,
-                                                    CNContactThumbnailImageDataKey];
-        CNContactFetchRequest *contactFetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:fetchKeys];
-        [[self sharedContactStore] enumerateContactsWithFetchRequest:contactFetchRequest error:nil usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
-            [self contact:contact enumeratePhoneNumberUsingBlock:block];
-        }];
-    }else{
-        ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
-        if(addressBookRef == NULL){
-            return;
-        }
-        CFArrayRef arrayRef = ABAddressBookCopyArrayOfAllPeople(addressBookRef);
-        NSUInteger count = CFArrayGetCount(arrayRef);
-        for(NSUInteger index = 0; index < count; index ++){
-            ABRecordRef contactRef = CFArrayGetValueAtIndex(arrayRef, index);
-            [self contactRef:contactRef enumeratePhoneNumberUsingBlock:block];
-        }
-        CFRelease(arrayRef);
-        CFRelease(addressBookRef);
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
+    ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
+    if(addressBookRef == NULL){
+        return;
     }
+    CFArrayRef arrayRef = ABAddressBookCopyArrayOfAllPeople(addressBookRef);
+    NSUInteger count = CFArrayGetCount(arrayRef);
+    for(NSUInteger index = 0; index < count; index ++){
+        ABRecordRef contactRef = CFArrayGetValueAtIndex(arrayRef, index);
+        [self contactRef:contactRef enumeratePhoneNumberUsingBlock:block];
+    }
+    CFRelease(arrayRef);
+    CFRelease(addressBookRef);
+#else
+    NSArray<id<CNKeyDescriptor>> *fetchKeys = @[[CNContactFormatter descriptorForRequiredKeysForStyle:CNContactFormatterStyleFullName],
+                                                CNContactPhoneNumbersKey,
+                                                CNContactThumbnailImageDataKey];
+    CNContactFetchRequest *contactFetchRequest = [[CNContactFetchRequest alloc] initWithKeysToFetch:fetchKeys];
+    [[self sharedContactStore] enumerateContactsWithFetchRequest:contactFetchRequest error:nil usingBlock:^(CNContact * _Nonnull contact, BOOL * _Nonnull stop) {
+        [self contact:contact enumeratePhoneNumberUsingBlock:block];
+    }];
+#endif
 }
 
 + (void)contact:(CNContact *)contact enumeratePhoneNumberUsingBlock:(CXContactsEnumerateBlock)block API_AVAILABLE(ios(9.0)){
@@ -146,6 +151,7 @@
     }];
 }
 
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
 + (void)contactRef:(ABRecordRef)contactRef enumeratePhoneNumberUsingBlock:(CXContactsEnumerateBlock)block{
     NSString *name = CFBridgingRelease(ABRecordCopyCompositeName(contactRef));
     ABMultiValueRef multiValueRef = ABRecordCopyValue(contactRef, kABPersonPhoneProperty);
@@ -163,6 +169,7 @@
     }
     CFRelease(multiValueRef);
 }
+#endif
 
 @end
 
