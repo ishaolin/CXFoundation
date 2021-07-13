@@ -1,5 +1,5 @@
 //
-//  NSDictionary+CXExtensions.h
+//  NSDictionary+CXFoundation.h
 //  Pods
 //
 //  Created by wshaolin on 2017/6/14.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDictionary (CXExtensions)
+@interface NSDictionary (CXFoundation)
 
 - (id)cx_objectForKey:(id<NSCopying>)key;
 
@@ -22,7 +22,7 @@
 
 @end
 
-@interface NSMutableDictionary (CXWriteExtensions)
+@interface NSMutableDictionary (CXFoundation)
 
 - (void)cx_setObject:(id)object forKey:(id<NSCopying>)key;
 

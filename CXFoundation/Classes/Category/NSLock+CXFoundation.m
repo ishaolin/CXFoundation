@@ -1,13 +1,13 @@
 //
-//  NSLock+CXExtensions.m
+//  NSLock+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2018/6/11.
 //
 
-#import "NSLock+CXExtensions.h"
+#import "NSLock+CXFoundation.h"
 
-@implementation NSLock (CXExtensions)
+@implementation NSLock (CXFoundation)
 
 - (void)cx_unlock:(float)delay{
     if(delay > 0){

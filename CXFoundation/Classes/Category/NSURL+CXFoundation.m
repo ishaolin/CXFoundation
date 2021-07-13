@@ -1,15 +1,15 @@
 //
-//  NSURL+CXExtensions.m
+//  NSURL+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2017/6/19.
 //
 //
 
-#import "NSURL+CXExtensions.h"
+#import "NSURL+CXFoundation.h"
 #import "CXStringUtils.h"
 
-@implementation NSURL (CXExtensions)
+@implementation NSURL (CXFoundation)
 
 - (NSDictionary<NSString *,NSString *> *)cx_params{    
     return [self.class cx_paramsWithString:self.query];

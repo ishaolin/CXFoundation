@@ -6,7 +6,7 @@
 //
 
 #import "CXIndexList.h"
-#import "NSString+CXExtensions.h"
+#import "NSString+CXFoundation.h"
 #import "CXUtils.h"
 
 static inline CXIndexObject *_CXFetchIndexObjectByIndexKey(NSArray<CXIndexObject *> *indexObjects, NSString *indexKey){

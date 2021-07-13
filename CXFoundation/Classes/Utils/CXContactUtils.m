@@ -9,7 +9,7 @@
 #import <Contacts/Contacts.h>
 #import <AddressBook/AddressBook.h>
 #import "CXDispatchHandler.h"
-#import "NSString+CXExtensions.h"
+#import "NSString+CXFoundation.h"
 
 @implementation CXContactUtils
 

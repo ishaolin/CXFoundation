@@ -1,15 +1,15 @@
 //
-//  NSBundle+CXExtensions.m
+//  NSBundle+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2017/6/14.
 //
 //
 
-#import "NSBundle+CXExtensions.h"
-#import "NSDictionary+CXExtensions.h"
+#import "NSBundle+CXFoundation.h"
+#import "NSDictionary+CXFoundation.h"
 
-@implementation NSBundle (CXExtensions)
+@implementation NSBundle (CXFoundation)
 
 - (NSString *)cx_appName{
     return [self.infoDictionary cx_stringForKey:@"CFBundleName"];

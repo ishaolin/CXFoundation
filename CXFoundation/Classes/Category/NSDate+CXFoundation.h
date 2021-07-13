@@ -1,5 +1,5 @@
 //
-//  NSDate+CXExtensions.h
+//  NSDate+CXFoundation.h
 //  Pods
 //
 //  Created by wshaolin on 2017/6/14.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSDate (CXExtensions)
+@interface NSDate (CXFoundation)
 
 + (uint64_t)cx_timeStampForMillisecond;
 - (uint64_t)cx_timeStampForMillisecond;

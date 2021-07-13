@@ -158,7 +158,7 @@
     _recordingTimer = nil;
 }
 
-- (void)handleRecordingTimer:(NSTimer *)recordingTimer{
+- (void)handleRecordingTimer:(CXTimer *)recordingTimer{
     if(self.progressBlock){
         self.progressBlock(self, _recordingProgress);
     }
@@ -192,7 +192,7 @@
     _peakPowerTimer = nil;
 }
 
-- (void)handlePeakPowerTimer:(NSTimer *)peakPowerTimer{
+- (void)handlePeakPowerTimer:(CXTimer *)peakPowerTimer{
     [_recorder updateMeters];
     
     CGFloat peakPower = [_recorder peakPowerForChannel:0];

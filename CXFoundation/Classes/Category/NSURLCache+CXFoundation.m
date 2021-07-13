@@ -1,17 +1,17 @@
 //
-//  NSURLCache+CXExtensions.m
+//  NSURLCache+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2019/1/28.
 //
 
-#import "NSURLCache+CXExtensions.h"
+#import "NSURLCache+CXFoundation.h"
 #import "CXUtils.h"
-#import "NSBundle+CXExtensions.h"
+#import "NSBundle+CXFoundation.h"
 #import "CXStringUtils.h"
 #import <objc/runtime.h>
 
-@implementation NSURLCache (CXExtensions)
+@implementation NSURLCache (CXFoundation)
 
 - (NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *)cx_cachedData{
     NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *cachedData = objc_getAssociatedObject(self, _cmd);

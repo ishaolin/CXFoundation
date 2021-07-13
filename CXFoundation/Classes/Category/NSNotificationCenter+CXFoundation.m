@@ -1,13 +1,13 @@
 //
-//  NSNotificationCenter+CXExtensions.m
+//  NSNotificationCenter+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2019/1/16.
 //
 
-#import "NSNotificationCenter+CXExtensions.h"
+#import "NSNotificationCenter+CXFoundation.h"
 
-@implementation NSNotificationCenter (CXExtensions)
+@implementation NSNotificationCenter (CXFoundation)
 
 + (void)notify:(NSNotificationName)name{
     [self notify:name userInfo:nil];

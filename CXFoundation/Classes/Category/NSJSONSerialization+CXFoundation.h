@@ -1,5 +1,5 @@
 //
-//  NSJSONSerialization+CXExtensions.h
+//  NSJSONSerialization+CXFoundation.h
 //  Pods
 //
 //  Created by wshaolin on 2017/6/14.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "CXFoundationDefines.h"
 
-@interface NSJSONSerialization (CXExtensions)
+@interface NSJSONSerialization (CXFoundation)
 
 + (NSDictionary *)cx_deserializeJSONToDictionary:(id)obj;
 

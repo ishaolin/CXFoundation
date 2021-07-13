@@ -1,14 +1,14 @@
 //
-//  NSJSONSerialization+CXExtensions.m
+//  NSJSONSerialization+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2017/6/14.
 //
 //
 
-#import "NSJSONSerialization+CXExtensions.h"
+#import "NSJSONSerialization+CXFoundation.h"
 
-@implementation NSJSONSerialization (CXExtensions)
+@implementation NSJSONSerialization (CXFoundation)
 
 + (NSDictionary *)cx_deserializeJSONToDictionary:(id)obj{
     return [self cx_deserializeJSON:obj forClass:[NSDictionary class]];

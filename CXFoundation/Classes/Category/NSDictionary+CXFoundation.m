@@ -1,14 +1,14 @@
 //
-//  NSDictionary+CXExtensions.m
+//  NSDictionary+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2017/6/14.
 //
 //
 
-#import "NSDictionary+CXExtensions.h"
+#import "NSDictionary+CXFoundation.h"
 
-@implementation NSDictionary (CXExtensions)
+@implementation NSDictionary (CXFoundation)
 
 - (id)cx_objectForKey:(id<NSCopying>)key{
     if(!key){
@@ -80,7 +80,7 @@
 
 @end
 
-@implementation NSMutableDictionary (CXWriteExtensions)
+@implementation NSMutableDictionary (CXFoundation)
 
 - (void)cx_setObject:(id)object forKey:(id<NSCopying>)key{
     if(!object || !key){

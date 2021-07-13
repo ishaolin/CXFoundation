@@ -1,5 +1,5 @@
 //
-//  NSURLCache+CXExtensions.h
+//  NSURLCache+CXFoundation.h
 //  Pods
 //
 //  Created by wshaolin on 2019/1/28.
@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSURLCache (CXExtensions)
+@interface NSURLCache (CXFoundation)
 
 - (void)cx_cacheData:(NSDictionary<NSString *, id> *)data forDomain:(NSString *)domain;
 

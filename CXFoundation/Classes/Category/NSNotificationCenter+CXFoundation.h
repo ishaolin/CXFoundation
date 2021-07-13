@@ -1,5 +1,5 @@
 //
-//  NSNotificationCenter+CXExtensions.h
+//  NSNotificationCenter+CXFoundation.h
 //  Pods
 //
 //  Created by wshaolin on 2019/1/16.
@@ -7,7 +7,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSNotificationCenter (CXExtensions)
+@interface NSNotificationCenter (CXFoundation)
 
 + (void)notify:(NSNotificationName)name;
 

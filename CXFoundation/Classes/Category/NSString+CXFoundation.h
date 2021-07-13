@@ -1,5 +1,5 @@
 //
-//  NSString+CXExtensions.h
+//  NSString+CXFoundation.h
 //  Pods
 //
 //  Created by wshaolin on 2018/12/21.
@@ -8,7 +8,7 @@
 #import <Foundation/Foundation.h>
 #import "CXFoundationDefines.h"
 
-@interface NSString (CXExtensions)
+@interface NSString (CXFoundation)
 
 - (NSString *)cx_phoneNumber;
 

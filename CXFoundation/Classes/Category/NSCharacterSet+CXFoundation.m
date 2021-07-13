@@ -1,13 +1,13 @@
 //
-//  NSCharacterSet+CXExtensions.m
+//  NSCharacterSet+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2019/1/24.
 //
 
-#import "NSCharacterSet+CXExtensions.h"
+#import "NSCharacterSet+CXFoundation.h"
 
-@implementation NSCharacterSet (CXExtensions)
+@implementation NSCharacterSet (CXFoundation)
 
 + (NSCharacterSet *)cx_URLWholeAllowedCharacterSet{
     static NSCharacterSet *characterSet = nil;

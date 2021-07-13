@@ -1,12 +1,12 @@
 //
-//  NSDate+CXExtensions.m
+//  NSDate+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2017/6/14.
 //
 //
 
-#import "NSDate+CXExtensions.h"
+#import "NSDate+CXFoundation.h"
 #import <objc/runtime.h>
 
 #if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_8_0)
@@ -43,7 +43,7 @@ static inline NSCalendar *CXGetCalendar(void){
     return [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 }
 
-@implementation NSDate (CXExtensions)
+@implementation NSDate (CXFoundation)
 
 - (NSCalendar *)cx_calendar{
     NSCalendar *calendar = objc_getAssociatedObject(self, _cmd);

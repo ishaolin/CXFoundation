@@ -1,14 +1,14 @@
 //
-//  NSString+CXExtensions.m
+//  NSString+CXFoundation.m
 //  Pods
 //
 //  Created by wshaolin on 2018/12/21.
 //
 
-#import "NSString+CXExtensions.h"
+#import "NSString+CXFoundation.h"
 #import "CXStringUtils.h"
 
-@implementation NSString (CXExtensions)
+@implementation NSString (CXFoundation)
 
 - (NSString *)cx_phoneNumber{
     NSString *phoneNumber = [self stringByReplacingOccurrencesOfString:@"+86" withString:@""];

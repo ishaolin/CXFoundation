@@ -8,7 +8,7 @@
 #import "CXDeviceUtils.h"
 #include <sys/param.h>
 #include <sys/mount.h>
-#import "NSDictionary+CXExtensions.h"
+#import "NSDictionary+CXFoundation.h"
 
 @implementation CXDeviceUtils
 

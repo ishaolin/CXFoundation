@@ -1,5 +1,5 @@
 //
-//  NSBundle+CXExtensions.h
+//  NSBundle+CXFoundation.h
 //  Pods
 //
 //  Created by wshaolin on 2017/6/14.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSBundle (CXExtensions)
+@interface NSBundle (CXFoundation)
 
 @property (nonatomic, strong, readonly) NSString *cx_appName;
 @property (nonatomic, strong, readonly) NSString *cx_appId;
