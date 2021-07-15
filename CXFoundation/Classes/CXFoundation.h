@@ -41,5 +41,6 @@
 #import "CXAudioRecorder.h"
 #import "CXContactUtils.h"
 #import "CXNumberFormatter.h"
+#import "CXObjectManager.h"
 
 #endif /* CXFoundation_h */

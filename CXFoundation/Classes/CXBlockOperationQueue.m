@@ -7,8 +7,7 @@
 
 #import "CXBlockOperationQueue.h"
 #import "CXUtils.h"
-
-static NSMutableArray<CXBlockOperationQueue *> *_operationQueues;
+#import "CXObjectManager.h"
 
 @interface CXBlockOperationQueue () {
     NSMutableArray<CXBlockOperationHandlerResult *> *_results; // 处理结果
@@ -23,11 +22,6 @@ static NSMutableArray<CXBlockOperationQueue *> *_operationQueues;
     if(self = [super init]){
         _results = [NSMutableArray array];
         _handlers = [NSMutableDictionary dictionary];
-        
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            _operationQueues = [NSMutableArray array];
-        });
     }
     
     return self;
@@ -43,7 +37,7 @@ static NSMutableArray<CXBlockOperationQueue *> *_operationQueues;
     }
     
     // 开始执行之后不能再添加handler
-    if([_operationQueues containsObject:self]){
+    if([CXObjectManager containsObject:self]){
         return;
     }
     
@@ -51,11 +45,10 @@ static NSMutableArray<CXBlockOperationQueue *> *_operationQueues;
 }
 
 - (void)invoke{
-    if(CXDictionaryIsEmpty(_handlers) || [_operationQueues containsObject:self]){
+    if(CXDictionaryIsEmpty(_handlers) || [CXObjectManager addObject:self]){
         return;
     }
     
-    [_operationQueues addObject:self];
     [_handlers enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, CXBlockOperationHandler  _Nonnull handler, BOOL * _Nonnull stop) {
         CXBlockOperationResultNotify notify = ^(id data){
             [self handleInvokeResultData:data forKey:key];
@@ -77,14 +70,14 @@ static NSMutableArray<CXBlockOperationQueue *> *_operationQueues;
         }
         
         [_handlers removeAllObjects];
-        [_operationQueues removeObject:self];
+        [CXObjectManager removeObject:self];
     }
 }
 
 - (void)cancelAllOperations{
     [_results removeAllObjects];
     [_handlers removeAllObjects];
-    [_operationQueues removeObject:self];
+    [CXObjectManager removeObject:self];
 }
 
 @end
