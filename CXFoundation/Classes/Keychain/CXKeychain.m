@@ -1,21 +1,21 @@
 //
-//  CXUKeychain.m
+//  CXKeychain.m
 //  Pods
 //
 //  Created by wshaolin on 2017/8/30.
 //
 
-#import "CXUKeychain.h"
-#import "CXUKeychainQuery.h"
+#import "CXKeychain.h"
+#import "CXKeychainQuery.h"
 
-@implementation CXUKeychain
+@implementation CXKeychain
 
 + (NSString *)stringForKey:(NSString *)key service:(NSString *)service{
     return [self stringForKey:key service:service error:nil];
 }
 
-+ (NSString *)stringForKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError *)error{
-    CXUKeychainQuery *query = [[CXUKeychainQuery alloc] init];
++ (NSString *)stringForKey:(NSString *)key service:(NSString *)service error:(CXKeychainError *)error{
+    CXKeychainQuery *query = [[CXKeychainQuery alloc] init];
     query.key = key;
     query.service = service;
     [query fetch:error];
@@ -26,8 +26,8 @@
     return [self dataForKey:key service:service error:nil];
 }
 
-+ (NSData *)dataForKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError *)error{
-    CXUKeychainQuery *query = [[CXUKeychainQuery alloc] init];
++ (NSData *)dataForKey:(NSString *)key service:(NSString *)service error:(CXKeychainError *)error{
+    CXKeychainQuery *query = [[CXKeychainQuery alloc] init];
     query.key = key;
     query.service = service;
     [query fetch:error];
@@ -38,8 +38,8 @@
     return [self removeForKey:key service:service error:nil];
 }
 
-+ (BOOL)removeForKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError *)error{
-    CXUKeychainQuery *query = [[CXUKeychainQuery alloc] init];
++ (BOOL)removeForKey:(NSString *)key service:(NSString *)service error:(CXKeychainError *)error{
+    CXKeychainQuery *query = [[CXKeychainQuery alloc] init];
     query.key = key;
     query.service = service;
     return [query remove:error];
@@ -49,8 +49,8 @@
     return [self setValue:value forKey:key service:service error:nil];
 }
 
-+ (BOOL)setValue:(NSString *)value forKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError *)error{
-    CXUKeychainQuery *query = [[CXUKeychainQuery alloc] init];
++ (BOOL)setValue:(NSString *)value forKey:(NSString *)key service:(NSString *)service error:(CXKeychainError *)error{
+    CXKeychainQuery *query = [[CXKeychainQuery alloc] init];
     query.key = key;
     query.service = service;
     query.value = value;
@@ -61,8 +61,8 @@
     return [self setData:data forKey:key service:service error:nil];
 }
 
-+ (BOOL)setData:(NSData *)data forKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError *)error{
-    CXUKeychainQuery *query = [[CXUKeychainQuery alloc] init];
++ (BOOL)setData:(NSData *)data forKey:(NSString *)key service:(NSString *)service error:(CXKeychainError *)error{
+    CXKeychainQuery *query = [[CXKeychainQuery alloc] init];
     query.key = key;
     query.service = service;
     query.data = data;
@@ -73,7 +73,7 @@
     return [self allAccounts:nil];
 }
 
-+ (NSArray<NSDictionary<NSString *, id> *> *)allAccounts:(CXUKeychainError *)error {
++ (NSArray<NSDictionary<NSString *, id> *> *)allAccounts:(CXKeychainError *)error {
     return [self accountsForService:nil error:error];
 }
 
@@ -81,8 +81,8 @@
     return [self accountsForService:service error:nil];
 }
 
-+ (NSArray<NSDictionary<NSString *, id> *> *)accountsForService:(NSString *)service error:(CXUKeychainError * _Nullable)error {
-    CXUKeychainQuery *query = [[CXUKeychainQuery alloc] init];
++ (NSArray<NSDictionary<NSString *, id> *> *)accountsForService:(NSString *)service error:(CXKeychainError * _Nullable)error {
+    CXKeychainQuery *query = [[CXKeychainQuery alloc] init];
     query.service = service;
     return [query fetchAll:error];
 }
@@ -90,11 +90,11 @@
 #if __IPHONE_4_0 && TARGET_OS_IPHONE
 
 + (CFTypeRef)accessibilityType {
-    return [CXUKeychainQuery accessibilityType];
+    return [CXKeychainQuery accessibilityType];
 }
 
 + (void)setAccessibilityType:(CFTypeRef)accessibilityType {
-    [CXUKeychainQuery setAccessibilityType:accessibilityType];
+    [CXKeychainQuery setAccessibilityType:accessibilityType];
 }
 
 #endif

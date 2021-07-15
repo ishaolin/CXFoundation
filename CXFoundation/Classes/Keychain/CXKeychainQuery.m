@@ -1,15 +1,15 @@
 //
-//  CXUKeychainQuery.m
+//  CXKeychainQuery.m
 //  Pods
 //
 //  Created by wshaolin on 2017/8/30.
 //
 
-#import "CXUKeychainQuery.h"
+#import "CXKeychainQuery.h"
 
-@implementation CXUKeychainQuery
+@implementation CXKeychainQuery
 
-- (BOOL)save:(CXUKeychainError *)error{
+- (BOOL)save:(CXKeychainError *)error{
     OSStatus status = [self _save];
     if(error){
         *error = status;
@@ -18,7 +18,7 @@
     return status == errSecSuccess;
 }
 
-- (BOOL)remove:(CXUKeychainError *)error{
+- (BOOL)remove:(CXKeychainError *)error{
     OSStatus status = [self _remove];
     if(error){
         *error = status;
@@ -27,7 +27,7 @@
     return status == errSecSuccess;
 }
 
-- (BOOL)fetch:(CXUKeychainError *)error {
+- (BOOL)fetch:(CXKeychainError *)error {
     OSStatus status = [self _fetch];
     if(error){
         *error = status;
@@ -38,7 +38,7 @@
 
 - (OSStatus)_save{
     if(!self.service || !self.key || !self.data){
-        return CXUKeychainBadArguments;
+        return CXKeychainBadArguments;
     }
     
     NSMutableDictionary<NSString *, id> *query = [self _queryInfo];
@@ -67,7 +67,7 @@
 
 - (OSStatus)_remove{
     if(!self.service || !self.key){
-        return CXUKeychainBadArguments;
+        return CXKeychainBadArguments;
     }
     
     NSMutableDictionary<NSString *, id> *query = [self _queryInfo];
@@ -85,7 +85,7 @@
     return status;
 }
 
-- (NSArray<NSDictionary<NSString *, id> *> *)fetchAll:(CXUKeychainError *)error {
+- (NSArray<NSDictionary<NSString *, id> *> *)fetchAll:(CXKeychainError *)error {
     NSMutableDictionary<NSString *, id> *query = [self _queryInfo];
     
     [query setObject:@(YES) forKey:(__bridge id)kSecReturnAttributes];
@@ -112,7 +112,7 @@
 
 - (OSStatus)_fetch{
     if(!self.service || !self.key){
-        return CXUKeychainBadArguments;
+        return CXKeychainBadArguments;
     }
     
     CFTypeRef result = NULL;
@@ -171,15 +171,15 @@
 #endif
     
     switch (self.syncMode) {
-        case CXUKeychainSyncModeFalse:{
+        case CXKeychainSyncModeFalse:{
             [info setObject:@(NO) forKey:(__bridge id)(kSecAttrSynchronizable)];
             break;
         }
-        case CXUKeychainSyncModeTrue:{
+        case CXKeychainSyncModeTrue:{
             [info setObject:@(YES) forKey:(__bridge id)(kSecAttrSynchronizable)];
             break;
         }
-        case CXUKeychainSyncModeAny:{
+        case CXKeychainSyncModeAny:{
             [info setObject:(__bridge id)(kSecAttrSynchronizableAny) forKey:(__bridge id)(kSecAttrSynchronizable)];
             break;
         }
@@ -190,10 +190,10 @@
 
 #if __IPHONE_4_0 && TARGET_OS_IPHONE
 
-static CFTypeRef _CXUKeychainAccessibilityType = NULL;
+static CFTypeRef _CXKeychainAccessibilityType = NULL;
 
 + (CFTypeRef)accessibilityType {
-    return _CXUKeychainAccessibilityType;
+    return _CXKeychainAccessibilityType;
 }
 
 + (void)setAccessibilityType:(CFTypeRef)accessibilityType {
@@ -201,11 +201,11 @@ static CFTypeRef _CXUKeychainAccessibilityType = NULL;
         CFRetain(accessibilityType);
     }
     
-    if(_CXUKeychainAccessibilityType){
-        CFRelease(_CXUKeychainAccessibilityType);
+    if(_CXKeychainAccessibilityType){
+        CFRelease(_CXKeychainAccessibilityType);
     }
     
-    _CXUKeychainAccessibilityType = accessibilityType;
+    _CXKeychainAccessibilityType = accessibilityType;
 }
 
 #endif

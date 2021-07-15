@@ -1,16 +1,16 @@
 //
-//  CXUKeychain.h
+//  CXKeychain.h
 //  Pods
 //
 //  Created by wshaolin on 2017/8/30.
 //
 
 #import <Foundation/Foundation.h>
-#import "CXUKeychainError.h"
+#import "CXKeychainError.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CXUKeychain : NSObject
+@interface CXKeychain : NSObject
 
 /**
  * Returns a string containing the value(password) for a given key(account) and service(group), or `nil` if the Keychain doesn't have a value(password) for the given parameters.
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return Returns a string containing the value(password) for a given key(account) and service(group), or `nil` if the Keychain doesn't have a value(password) for the given parameters.
  */
 + (nullable NSString *)stringForKey:(NSString *)key service:(NSString *)service;
-+ (nullable NSString *)stringForKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError * _Nullable)error;
++ (nullable NSString *)stringForKey:(NSString *)key service:(NSString *)service error:(CXKeychainError * _Nullable)error;
 
 /**
  * Returns a data containing the value(password) for a given key(account) and service(group), or `nil` if the Keychain doesn't have a value(password) for the given parameters.
@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return Returns a data containing the value(password) for a given key(account) and service(group), or `nil` if the Keychain doesn't have a value(password) for the given parameters.
  */
 + (nullable NSData *)dataForKey:(NSString *)key service:(NSString *)service;
-+ (nullable NSData *)dataForKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError * _Nullable)error;
++ (nullable NSData *)dataForKey:(NSString *)key service:(NSString *)service error:(CXKeychainError * _Nullable)error;
 
 /**
  * Removes a value(password) from the Keychain.
@@ -43,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return Returns `YES` on success, or `NO` on failure.
  */
 + (BOOL)removeForKey:(NSString *)key service:(NSString *)service;
-+ (BOOL)removeForKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError * _Nullable)error;
++ (BOOL)removeForKey:(NSString *)key service:(NSString *)service error:(CXKeychainError * _Nullable)error;
 
 /**
  * Sets a string value(password) in the Keychain.
@@ -55,7 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return Returns `YES` on success, or `NO` on failure.
  */
 + (BOOL)setValue:(NSString *)value forKey:(NSString *)key service:(NSString *)service;
-+ (BOOL)setValue:(NSString *)value forKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError * _Nullable)error;
++ (BOOL)setValue:(NSString *)value forKey:(NSString *)key service:(NSString *)service error:(CXKeychainError * _Nullable)error;
 
 /**
  * Sets a data value(password) in the Keychain.
@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return Returns `YES` on success, or `NO` on failure.
  */
 + (BOOL)setData:(NSData *)data forKey:(NSString *)key service:(NSString *)service;
-+ (BOOL)setData:(NSData *)data forKey:(NSString *)key service:(NSString *)service error:(CXUKeychainError * _Nullable)error;
++ (BOOL)setData:(NSData *)data forKey:(NSString *)key service:(NSString *)service error:(CXKeychainError * _Nullable)error;
 
 /**
  * Returns an array containing the Keychain's keys(accounts), or `nil` if the Keychain has no keys(accounts).
@@ -75,7 +75,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return An array of dictionaries containing the Keychain's keys(accounts), or `nil` if the Keychain doesn't have any keys(accounts). The order of the objects in the array isn't defined.
  */
 + (nullable NSArray<NSDictionary<NSString *, id> *> *)allAccounts;
-+ (nullable NSArray<NSDictionary<NSString *, id> *> *)allAccounts:(CXUKeychainError * _Nullable)error;
++ (nullable NSArray<NSDictionary<NSString *, id> *> *)allAccounts:(CXKeychainError * _Nullable)error;
 
 /**
  * Returns an array containing the Keychain's keys(accounts) for a given service(group), or `nil` if the Keychain doesn't have any keys(accounts) for the given service(group).
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @return An array of dictionaries containing the Keychain's keys(accounts) for a given `service`, or `nil` if the Keychain doesn't have any keys(accounts) for the given `service`. The order of the objects in the array isn't defined.
  */
 + (nullable NSArray<NSDictionary<NSString *, id> *> *)accountsForService:(nullable NSString *)service;
-+ (nullable NSArray<NSDictionary<NSString *, id> *> *)accountsForService:(nullable NSString *)service error:(CXUKeychainError * _Nullable)error;
++ (nullable NSArray<NSDictionary<NSString *, id> *> *)accountsForService:(nullable NSString *)service error:(CXKeychainError * _Nullable)error;
 
 #if __IPHONE_4_0 && TARGET_OS_IPHONE
 

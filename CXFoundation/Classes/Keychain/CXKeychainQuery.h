@@ -1,20 +1,20 @@
 //
-//  CXUKeychainQuery.h
+//  CXKeychainQuery.h
 //  Pods
 //  
 //  Created by wshaolin on 2017/8/30.
 //
 
 #import <Foundation/Foundation.h>
-#import "CXUKeychainError.h"
+#import "CXKeychainError.h"
 
-typedef NS_ENUM(NSUInteger, CXUKeychainSyncMode) {
-    CXUKeychainSyncModeAny    = 0,
-    CXUKeychainSyncModeFalse  = 1,
-    CXUKeychainSyncModeTrue   = 2
+typedef NS_ENUM(NSUInteger, CXKeychainSyncMode) {
+    CXKeychainSyncModeAny    = 0,
+    CXKeychainSyncModeFalse  = 1,
+    CXKeychainSyncModeTrue   = 2
 };
 
-@interface CXUKeychainQuery : NSObject
+@interface CXKeychainQuery : NSObject
 
 @property (nonatomic, copy) NSString *key; // kSecAttrAccount
 @property (nonatomic, copy) NSString *service; // kSecAttrService
@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, CXUKeychainSyncMode) {
 @property (nonatomic, copy) NSString *accessGroup; // kSecAttrAccessGroup
 #endif
 
-@property (nonatomic, assign) CXUKeychainSyncMode syncMode; // kSecAttrSynchronizable
+@property (nonatomic, assign) CXKeychainSyncMode syncMode; // kSecAttrSynchronizable
 
 /**
  * Root storage for value data.
@@ -49,7 +49,7 @@ typedef NS_ENUM(NSUInteger, CXUKeychainSyncMode) {
  *
  * @return `YES` if saving was successful, `NO` otherwise.
  */
-- (BOOL)save:(CXUKeychainError *)error;
+- (BOOL)save:(CXKeychainError *)error;
 
 /**
  * Remove keychain items that match the given key(account), service(group), and access group.
@@ -58,7 +58,7 @@ typedef NS_ENUM(NSUInteger, CXUKeychainSyncMode) {
  *
  * @return `YES` if saving was successful, `NO` otherwise.
  */
-- (BOOL)remove:(CXUKeychainError *)error;
+- (BOOL)remove:(CXKeychainError *)error;
 
 /**
  * Fetch all keychain items that match the given key(account), service(group), and access
@@ -70,7 +70,7 @@ typedef NS_ENUM(NSUInteger, CXUKeychainSyncMode) {
  *
  * The order of the items is not determined.
  */
-- (NSArray<NSDictionary<NSString *, id> *> *)fetchAll:(CXUKeychainError *)error;
+- (NSArray<NSDictionary<NSString *, id> *> *)fetchAll:(CXKeychainError *)error;
 
 /**
  * Fetch the keychain item that matches the given key(account), service(group), and access group. The `value` and `data` properties will be populated unless an error occurs. The values of `value` and `data` are ignored when fetching.
@@ -79,7 +79,7 @@ typedef NS_ENUM(NSUInteger, CXUKeychainSyncMode) {
  *
  * @return `YES` if fetching was successful, `NO` otherwise.
  */
-- (BOOL)fetch:(CXUKeychainError *)error;
+- (BOOL)fetch:(CXKeychainError *)error;
 
 #if __IPHONE_4_0 && TARGET_OS_IPHONE
 

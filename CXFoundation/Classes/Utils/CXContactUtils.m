@@ -24,7 +24,7 @@
 }
 
 + (CXContactsAuthStatus)contactsAuthStatus{
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
+#if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0)
     switch(ABAddressBookGetAuthorizationStatus()){
         case kABAuthorizationStatusRestricted:
             return CXContactsAuthStatusRestricted;
@@ -58,7 +58,7 @@
         return;
     }
     
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
+#if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0)
     ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
     ABAddressBookRequestAccessWithCompletion(addressBookRef, ^(bool granted, CFErrorRef error) {
         [CXDispatchHandler asyncOnMainQueue:^{
@@ -113,7 +113,7 @@
 }
 
 + (void)enumerateContactsUsingBlock:(CXContactsEnumerateBlock)block{
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
+#if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0)
     ABAddressBookRef addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
     if(addressBookRef == NULL){
         return;
@@ -151,7 +151,7 @@
     }];
 }
 
-#if __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0
+#if (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_9_0)
 + (void)contactRef:(ABRecordRef)contactRef enumeratePhoneNumberUsingBlock:(CXContactsEnumerateBlock)block{
     NSString *name = CFBridgingRelease(ABRecordCopyCompositeName(contactRef));
     ABMultiValueRef multiValueRef = ABRecordCopyValue(contactRef, kABPersonPhoneProperty);
@@ -167,6 +167,7 @@
             block(contact);
         }
     }
+    
     CFRelease(multiValueRef);
 }
 #endif
