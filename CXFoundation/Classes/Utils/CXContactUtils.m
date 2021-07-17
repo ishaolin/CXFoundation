@@ -14,13 +14,13 @@
 @implementation CXContactUtils
 
 + (CNContactStore *)sharedContactStore API_AVAILABLE(ios(9.0)){
-    static CNContactStore *_contactStore = nil;
+    static CNContactStore *contactStore = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _contactStore = [[CNContactStore alloc] init];
+        contactStore = [[CNContactStore alloc] init];
     });
     
-    return _contactStore;
+    return contactStore;
 }
 
 + (CXContactsAuthStatus)contactsAuthStatus{
