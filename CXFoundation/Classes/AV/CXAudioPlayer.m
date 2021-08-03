@@ -12,11 +12,11 @@
 
 @interface CXAudioPlayer () <AVAudioPlayerDelegate> {
     AVAudioPlayer *_player;
-    CXTimer *_progresTimer;
+    CXTimer *_progressTimer;
 }
 
-@property (nonatomic, copy) CXAudioPlayerCompletionBlock completion;
-@property (nonatomic, copy) CXAudioPlayerProgressBlock progress;
+@property (nonatomic, copy) CXAudioPlayerCompletionBlock completionBlock;
+@property (nonatomic, copy) CXAudioPlayerProgressBlock progressBlock;
 
 @end
 
@@ -87,18 +87,18 @@
           completion:(CXAudioPlayerCompletionBlock)completion
                error:(NSError *)error{
     if(player){
-        self.progress = progress;
-        self.completion = completion;
+        self.progressBlock = progress;
+        self.completionBlock = completion;
         
         _player = player;
         _player.delegate = self;
         [_player prepareToPlay];
         [_player play];
         
-        if(self.progress && !_progresTimer){
-            _progresTimer = [CXTimer taskTimerWithConfig:^(CXTimerConfig *config) {
+        if(self.progressBlock && !_progressTimer){
+            _progressTimer = [CXTimer taskTimerWithConfig:^(CXTimerConfig *config) {
                 config.target = self;
-                config.action = @selector(handlePlayProgres:);
+                config.action = @selector(handlePlayProgress:);
                 config.interval = 1.0;
                 config.repeats = YES;
             }];
@@ -110,16 +110,16 @@
     }
 }
 
-- (void)handlePlayProgres:(CXTimer *)timer{
-    !self.progress ?: self.progress(self, _player.currentTime, _player.duration);
+- (void)handlePlayProgress:(CXTimer *)timer{
+    !self.progressBlock ?: self.progressBlock(self, _player.currentTime, _player.duration);
 }
 
-- (void)removeProgresTimer{
-    if(_progresTimer.isValid){
-        [_progresTimer invalidate];
+- (void)removeProgressTimer{
+    if(_progressTimer.isValid){
+        [_progressTimer invalidate];
     }
     
-    _progresTimer = nil;
+    _progressTimer = nil;
 }
 
 - (void)stopPlay{
@@ -133,27 +133,27 @@
     
     _player.delegate = nil;
     _player = nil;
-    [self removeProgresTimer];
+    [self removeProgressTimer];
 }
 
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag{
-    CXAudioPlayerCompletionBlock completion = self.completion;
-    self.completion = nil;
-    self.progress = nil;
+    CXAudioPlayerCompletionBlock completionBlock = self.completionBlock;
+    self.completionBlock = nil;
+    self.progressBlock = nil;
     _player.delegate = nil;
     _player = nil;
-    [self removeProgresTimer];
-    !completion ?: completion(self, nil);
+    [self removeProgressTimer];
+    !completionBlock ?: completionBlock(self, nil);
 }
 
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error{
-    CXAudioPlayerCompletionBlock completion = self.completion;
-    self.completion = nil;
-    self.progress = nil;
+    CXAudioPlayerCompletionBlock completionBlock = self.completionBlock;
+    self.completionBlock = nil;
+    self.progressBlock = nil;
     _player.delegate = nil;
     _player = nil;
-    [self removeProgresTimer];
-    !completion ?: completion(self, nil);
+    [self removeProgressTimer];
+    !completionBlock ?: completionBlock(self, nil);
 }
 
 - (BOOL)isPlaying{
